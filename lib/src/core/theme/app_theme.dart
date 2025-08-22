@@ -9,7 +9,7 @@ class AppTheme {
         seedColor: const Color(AppConfig.primaryColor),
         brightness: Brightness.light,
       ),
-      fontFamily: 'Poppins',
+      // fontFamily: 'Poppins', // Comentado temporalmente hasta agregar la fuente
       
       // AppBar Theme
       appBarTheme: const AppBarTheme(
@@ -129,7 +129,7 @@ class AppTheme {
         seedColor: const Color(AppConfig.primaryColor),
         brightness: Brightness.dark,
       ),
-      fontFamily: 'Poppins',
+      // fontFamily: 'Poppins', // Comentado temporalmente hasta agregar la fuente
       
       // AppBar Theme
       appBarTheme: const AppBarTheme(
