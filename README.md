@@ -33,10 +33,13 @@ lib/
 ├── main.dart
 ├── src/
 │   ├── config/
-│   │   └── app_config.dart
+│   │   ├── app_config.dart
+│   │   └── feature_flags.dart
 │   ├── core/
-│   │   ├── constants/
-│   │   │   └── app_constants.dart
+│   │   ├── design/
+│   │   │   └── design_tokens.dart
+│   │   ├── interfaces/
+│   │   │   └── api_interfaces.dart
 │   │   ├── theme/
 │   │   │   └── app_theme.dart
 │   │   └── utils/
@@ -67,7 +70,9 @@ lib/
 │   │   │   ├── home_page.dart
 │   │   │   ├── auth/
 │   │   │   │   ├── login_page.dart
-│   │   │   │   └── register_page.dart
+│   │   │   │   ├── register_page.dart
+│   │   │   │   ├── forgot_password_page.dart
+│   │   │   │   └── email_verification_page.dart
 │   │   │   ├── reserves/
 │   │   │   │   ├── reserves_page.dart
 │   │   │   │   └── reserve_detail_page.dart
@@ -95,7 +100,16 @@ lib/
 │   │       └── loading_widget.dart
 │   └── routes/
 │       └── app_routes.dart
+└── docs/
+    └── TEAM_COORDINATION.md
 ```
+
+### **Patrones de Diseño Implementados**
+- **Clean Architecture:** Separación de responsabilidades
+- **Repository Pattern:** Abstracción de fuentes de datos
+- **Provider/Riverpod:** Gestión de estado
+- **Feature Flags:** Control de funcionalidades
+- **Design Tokens:** Sistema de diseño centralizado
 
 ## 🗄️ Base de Datos
 

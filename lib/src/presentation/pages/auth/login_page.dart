@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../config/app_config.dart';
+import '../../providers/auth_provider.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isLoading = false;
   bool _obscurePassword = true;
   bool _rememberMe = false;
 
@@ -26,50 +27,51 @@ class _LoginPageState extends State<LoginPage> {
 
   void _handleLogin() {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-
-      // Simular proceso de login
-      Future.delayed(const Duration(seconds: 2), () {
-        setState(() {
-          _isLoading = false;
-        });
-        
-        // TODO: Implementar lógica de autenticación real
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Funcionalidad de login en desarrollo'),
-            backgroundColor: Colors.orange,
-          ),
-        );
-      });
+      final authNotifier = ref.read(authProvider.notifier);
+      authNotifier.signInWithEmailAndPassword(
+        _emailController.text.trim(),
+        _passwordController.text,
+      );
     }
   }
 
   void _handleGoogleLogin() {
-    setState(() {
-      _isLoading = true;
-    });
+    // TODO: Implementar login con Google cuando esté configurado
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Login con Google en desarrollo'),
+        backgroundColor: Colors.orange,
+      ),
+    );
+  }
 
-    // Simular login con Google
-    Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        _isLoading = false;
-      });
-      
-      // TODO: Implementar login con Google
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Login con Google en desarrollo'),
-          backgroundColor: Colors.orange,
-        ),
-      );
-    });
+  void _handleGuestLogin() {
+    final authNotifier = ref.read(authProvider.notifier);
+    authNotifier.signInAsGuest();
   }
 
   @override
   Widget build(BuildContext context) {
+    // Escuchar cambios en el estado de autenticación
+    ref.listen<AuthState>(authProvider, (previous, next) {
+      if (next.isAuthenticated && !next.isLoading) {
+        // Redirigir a la página principal después del login exitoso
+        context.go('/home');
+      }
+      
+      if (next.error != null) {
+        // Mostrar error si existe
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.error!),
+            backgroundColor: Colors.red,
+          ),
+        );
+        // Limpiar el error
+        ref.read(authProvider.notifier).clearError();
+      }
+    });
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -99,6 +101,10 @@ class _LoginPageState extends State<LoginPage> {
                 
                 // Botón de Google
                 _buildGoogleButton(),
+                const SizedBox(height: 16),
+                
+                // Botón continuar como invitado
+                _buildGuestButton(),
                 const SizedBox(height: 32),
                 
                 // Enlaces adicionales
@@ -248,10 +254,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildLoginButton() {
+    final authState = ref.watch(authProvider);
+    
     return SizedBox(
       height: 50,
       child: ElevatedButton(
-        onPressed: _isLoading ? null : _handleLogin,
+        onPressed: authState.isLoading ? null : _handleLogin,
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(AppConfig.primaryColor),
           foregroundColor: Colors.white,
@@ -259,7 +267,7 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        child: _isLoading
+        child: authState.isLoading
             ? const SizedBox(
                 height: 20,
                 width: 20,
@@ -309,10 +317,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildGoogleButton() {
+    final authState = ref.watch(authProvider);
+    
     return SizedBox(
       height: 50,
       child: OutlinedButton.icon(
-        onPressed: _isLoading ? null : _handleGoogleLogin,
+        onPressed: authState.isLoading ? null : _handleGoogleLogin,
         icon: Image.network(
           'https://developers.google.com/identity/images/g-logo.png',
           height: 20,
@@ -331,6 +341,25 @@ class _LoginPageState extends State<LoginPage> {
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.grey[800],
           side: BorderSide(color: Colors.grey[300]!),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGuestButton() {
+    final authState = ref.watch(authProvider);
+    
+    return SizedBox(
+      height: 50,
+      child: TextButton.icon(
+        onPressed: authState.isLoading ? null : _handleGuestLogin,
+        icon: const Icon(Icons.person_outline),
+        label: const Text('Continuar como invitado'),
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.grey[600],
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

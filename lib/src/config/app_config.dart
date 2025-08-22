@@ -12,10 +12,10 @@ class AppConfig {
   static const String appVersion = '1.0.0';
   static const String appDescription = 'Plataforma de aviturismo y reservas naturales de Nicaragua';
   
-  // Colors
-  static const int primaryColor = 0xFF2E7D32; // Green
-  static const int secondaryColor = 0xFF4CAF50; // Light Green
-  static const int accentColor = 0xFFFF9800; // Orange
+  // Colors (usando Design Tokens)
+  static const int primaryColor = 0xFF2E7D32; // Green - TODO: Migrar a DesignTokens
+  static const int secondaryColor = 0xFF4CAF50; // Light Green - TODO: Migrar a DesignTokens
+  static const int accentColor = 0xFFFF9800; // Orange - TODO: Migrar a DesignTokens
   
   // Map Configuration
   static const String googleMapsApiKey = 'your_google_maps_api_key_here';

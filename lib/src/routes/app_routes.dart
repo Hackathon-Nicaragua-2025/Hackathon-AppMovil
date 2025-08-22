@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../presentation/pages/splash_page.dart';
 import '../presentation/pages/home_page.dart';
 import '../presentation/pages/reserves/reserves_page.dart';
 import '../presentation/pages/reserves/reserve_detail_page.dart';
@@ -16,7 +17,8 @@ import '../presentation/pages/auth/email_verification_page.dart';
 // import '../presentation/pages/education/education_page.dart';
 
 class AppRoutes {
-  static const String home = '/';
+  static const String splash = '/';
+  static const String home = '/home';
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
@@ -32,8 +34,13 @@ class AppRoutes {
   static const String education = '/education';
 
   static GoRouter get router => GoRouter(
-    initialLocation: home,
+    initialLocation: splash,
     routes: [
+      GoRoute(
+        path: splash,
+        name: 'splash',
+        builder: (context, state) => const SplashPage(),
+      ),
       GoRoute(
         path: home,
         name: 'home',

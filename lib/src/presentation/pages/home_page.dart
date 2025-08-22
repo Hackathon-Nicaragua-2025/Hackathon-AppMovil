@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../config/app_config.dart';
+import '../providers/auth_provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(AppConfig.appName),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () => context.go('/profile'),
-          ),
+          _buildUserMenu(ref, context),
         ],
       ),
       body: SingleChildScrollView(
@@ -166,45 +165,6 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-            
-            const SizedBox(height: 32),
-            
-            // Authentication Section
-            Text(
-              'Acceso a la Aplicación',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 16),
-            
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () => context.go('/login'),
-                    icon: const Icon(Icons.login),
-                    label: const Text('Iniciar Sesión'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(AppConfig.primaryColor),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: () => context.go('/register'),
-                    icon: const Icon(Icons.person_add),
-                    label: const Text('Registrarse'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(AppConfig.primaryColor),
-                      side: const BorderSide(color: Color(AppConfig.primaryColor)),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),
@@ -287,6 +247,72 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildUserMenu(WidgetRef ref, BuildContext context) {
+    final authState = ref.watch(authProvider);
+    
+    return PopupMenuButton<String>(
+      icon: const Icon(Icons.person),
+      onSelected: (value) {
+        switch (value) {
+          case 'profile':
+            context.go('/profile');
+            break;
+          case 'logout':
+            _handleLogout(ref, context);
+            break;
+        }
+      },
+      itemBuilder: (context) => [
+        if (authState.user != null) ...[
+          PopupMenuItem(
+            value: 'profile',
+            child: Row(
+              children: [
+                const Icon(Icons.person_outline),
+                const SizedBox(width: 8),
+                Text(authState.isGuest ? 'Modo Invitado' : 'Mi Perfil'),
+              ],
+            ),
+          ),
+        ],
+        const PopupMenuItem(
+          value: 'logout',
+          child: Row(
+            children: [
+              Icon(Icons.logout),
+              SizedBox(width: 8),
+              Text('Cerrar Sesión'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _handleLogout(WidgetRef ref, BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Cerrar Sesión'),
+        content: const Text('¿Estás seguro de que quieres cerrar sesión?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              ref.read(authProvider.notifier).signOut();
+              context.go('/login');
+            },
+            child: const Text('Cerrar Sesión'),
+          ),
+        ],
       ),
     );
   }
