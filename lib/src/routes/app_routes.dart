@@ -8,13 +8,14 @@ import '../presentation/pages/auth/login_page.dart';
 import '../presentation/pages/auth/register_page.dart';
 import '../presentation/pages/auth/forgot_password_page.dart';
 import '../presentation/pages/auth/email_verification_page.dart';
-// import '../presentation/pages/birds/birds_page.dart';
-// import '../presentation/pages/birds/bird_detail_page.dart';
-// import '../presentation/pages/bookings/bookings_page.dart';
+import '../presentation/pages/birds/birds_page.dart';
+import '../presentation/pages/birds/bird_detail_page.dart';
+import '../presentation/pages/bookings/bookings_page.dart';
+import '../presentation/pages/profile/profile_page.dart';
+import '../presentation/pages/events/events_page.dart';
+import '../presentation/pages/education/education_page.dart';
 // import '../presentation/pages/bookings/create_booking_page.dart';
 // import '../presentation/pages/profile/profile_page.dart';
-// import '../presentation/pages/events/events_page.dart';
-// import '../presentation/pages/education/education_page.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -100,44 +101,39 @@ class AppRoutes {
       //     return ReserveDetailPage(reserveId: reserveId);
       //   },
       // ),
-      // GoRoute(
-      //   path: birds,
-      //   name: 'birds',
-      //   builder: (context, state) => const BirdsPage(),
-      // ),
-      // GoRoute(
-      //   path: birdDetail,
-      //   name: 'birdDetail',
-      //   builder: (context, state) {
-      //     final birdId = state.pathParameters['id']!;
-      //     return BirdDetailPage(birdId: birdId);
-      //   },
-      // ),
-      // GoRoute(
-      //   path: bookings,
-      //   name: 'bookings',
-      //   builder: (context, state) => const BookingsPage(),
-      // ),
-      // GoRoute(
-      //   path: createBooking,
-      //   name: 'createBooking',
-      //   builder: (context, state) => const CreateBookingPage(),
-      // ),
-      // GoRoute(
-      //   path: profile,
-      //   name: 'profile',
-      //   builder: (context, state) => const ProfilePage(),
-      // ),
-      // GoRoute(
-      //   path: events,
-      //   name: 'events',
-      //   builder: (context, state) => const EventsPage(),
-      // ),
-      // GoRoute(
-      //   path: education,
-      //   name: 'education',
-      //   builder: (context, state) => const EducationPage(),
-      // ),
+      GoRoute(
+        path: birds,
+        name: 'birds',
+        builder: (context, state) => const BirdsPage(),
+      ),
+      GoRoute(
+        path: birdDetail,
+        name: 'birdDetail',
+        builder: (context, state) {
+          final birdId = state.pathParameters['id']!;
+          return BirdDetailPage(birdId: birdId);
+        },
+      ),
+      GoRoute(
+        path: bookings,
+        name: 'bookings',
+        builder: (context, state) => const BookingsPage(),
+      ),
+      GoRoute(
+        path: profile,
+        name: 'profile',
+        builder: (context, state) => const ProfilePage(),
+      ),
+      GoRoute(
+        path: events,
+        name: 'events',
+        builder: (context, state) => const EventsPage(),
+      ),
+      GoRoute(
+        path: education,
+        name: 'education',
+        builder: (context, state) => const EducationPage(),
+      ),
     ],
     errorBuilder: (context, state) => Scaffold(
       appBar: AppBar(

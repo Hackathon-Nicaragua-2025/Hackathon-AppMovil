@@ -8,7 +8,7 @@ class Bird {
   final String? descripcion;
   final bool esEndemica;
   final bool migratoria;
-  final String? tags;
+  final List<String> tags;
   final DateTime createdAt;
 
   Bird({
@@ -19,7 +19,7 @@ class Bird {
     this.descripcion,
     this.esEndemica = false,
     this.migratoria = false,
-    this.tags,
+    this.tags = const [],
     DateTime? createdAt,
   }) : 
     birdId = birdId ?? const Uuid().v4(),
@@ -34,7 +34,7 @@ class Bird {
       descripcion: json['descripcion'],
       esEndemica: json['esEndemica'] ?? false,
       migratoria: json['migratoria'] ?? false,
-      tags: json['tags'],
+      tags: List<String>.from(json['tags'] ?? []),
       createdAt: DateTime.parse(json['createdAt']),
     );
   }
@@ -60,7 +60,7 @@ class Bird {
     String? descripcion,
     bool? esEndemica,
     bool? migratoria,
-    String? tags,
+    List<String>? tags,
   }) {
     return Bird(
       birdId: birdId,
