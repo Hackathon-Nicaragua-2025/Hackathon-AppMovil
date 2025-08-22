@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../config/app_config.dart';
 import '../../core/design/design_tokens.dart';
+import '../providers/auth_provider.dart';
 
 /// Página de splash que se muestra al iniciar la aplicación
 /// 
-/// Muestra el logo y nombre de la app, luego redirige al login
-class SplashPage extends StatefulWidget {
+/// Muestra el logo y nombre de la app, luego redirige según el estado de autenticación
+class SplashPage extends ConsumerStatefulWidget {
   const SplashPage({super.key});
 
   @override
-  State<SplashPage> createState() => _SplashPageState();
+  ConsumerState<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
+class _SplashPageState extends ConsumerState<SplashPage> with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late AnimationController _scaleController;
   late Animation<double> _fadeAnimation;
@@ -54,10 +56,15 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     _fadeController.forward();
     _scaleController.forward();
     
-    // Redirigir al login después de 3 segundos
+    // Verificar estado de autenticación y redirigir después de 3 segundos
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        context.go('/login');
+        final authState = ref.read(authProvider);
+        if (authState.isAuthenticated) {
+          context.go('/home');
+        } else {
+          context.go('/login');
+        }
       }
     });
   }

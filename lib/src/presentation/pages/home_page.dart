@@ -16,6 +16,14 @@ class HomePage extends ConsumerWidget {
     final authState = ref.watch(authProvider);
     final canPerformActions = ref.watch(canPerformActionsProvider);
 
+    // Escuchar cambios en el estado de autenticación
+    ref.listen<AuthState>(authProvider, (previous, next) {
+      if (!next.isAuthenticated && !next.isLoading) {
+        // Si el usuario no está autenticado, redirigir al login
+        context.go('/login');
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: DesignTokens.primaryColor,
