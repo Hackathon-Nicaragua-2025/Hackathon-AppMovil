@@ -1,8 +1,8 @@
-# AveTurismo Nicaragua - Plataforma de Aviturismo
+# AviFy - Plataforma de Aviturismo
 
 ## 📋 Descripción del Proyecto
 
-AveTurismo es una aplicación móvil desarrollada en Flutter para promover el aviturismo y las reservas naturales de Nicaragua. La plataforma centraliza información de especies de aves, gestiona reservas de visitas guiadas y facilita la conexión entre operadores locales con turistas nacionales e internacionales.
+AviFy es una aplicación móvil desarrollada en Flutter para promover el aviturismo y las reservas naturales de Nicaragua. La plataforma centraliza información de especies de aves, gestiona reservas de visitas guiadas y facilita la conexión entre operadores locales con turistas nacionales e internacionales.
 
 ## 🎯 Objetivos del MVP
 

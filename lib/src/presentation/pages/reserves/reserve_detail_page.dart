@@ -1,172 +1,124 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../config/app_config.dart';
 import '../../../domain/entities/reserve.dart';
+import '../../../core/design/design_tokens.dart';
 
-class ReserveDetailPage extends StatefulWidget {
+/// Página que muestra los detalles de una reserva natural específica
+class ReserveDetailPage extends StatelessWidget {
   final String reserveId;
 
-  const ReserveDetailPage({super.key, required this.reserveId});
-
-  @override
-  State<ReserveDetailPage> createState() => _ReserveDetailPageState();
-}
-
-class _ReserveDetailPageState extends State<ReserveDetailPage> {
-  late Reserve _reserve;
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadReserveData();
-  }
-
-  void _loadReserveData() {
-    // Simular carga de datos
-    Future.delayed(const Duration(milliseconds: 500), () {
-      _reserve = _getReserveById(widget.reserveId);
-      setState(() {
-        _isLoading = false;
-      });
-    });
-  }
-
-  Reserve _getReserveById(String id) {
-    final reserves = [
-      Reserve(
-        reserveId: '1',
-        nombre: 'Reserva Natural Indio Maíz',
-        descripcion: 'La Reserva Natural Indio Maíz es una de las reservas más grandes y biodiversas de Nicaragua. Con una extensión de más de 2,600 km², esta reserva alberga una increíble variedad de vida silvestre, incluyendo más de 400 especies de aves, jaguares, tapires, monos y una gran diversidad de flora tropical.',
-        lat: 10.8231,
-        lng: -83.5677,
-        direccion: 'Carretera San Carlos - El Castillo, Río San Juan',
-        provincia: 'Río San Juan',
-        horario: '6:00 AM - 6:00 PM',
-        telefono: '+505 8888-8888',
-        emailContacto: 'info@indio-maiz.com',
-      ),
-      Reserve(
-        reserveId: '2',
-        nombre: 'Reserva Natural Cerro Silva',
-        descripcion: 'El Cerro Silva es una imponente montaña cubierta de bosque tropical húmedo que se eleva majestuosamente en el sureste de Nicaragua. Esta reserva es un paraíso para los observadores de aves, con más de 300 especies registradas, incluyendo el quetzal resplandeciente y el tucán pico iris.',
-        lat: 11.2345,
-        lng: -84.1234,
-        direccion: 'Comunidad El Castillo, Río San Juan',
-        provincia: 'Río San Juan',
-        horario: '7:00 AM - 5:00 PM',
-        telefono: '+505 7777-7777',
-        emailContacto: 'contact@cerro-silva.com',
-      ),
-      Reserve(
-        reserveId: '3',
-        nombre: 'Reserva Natural Volcán Mombacho',
-        descripcion: 'El Volcán Mombacho es un volcán inactivo que alberga un bosque nuboso único en Nicaragua. Con senderos bien mantenidos y miradores espectaculares, esta reserva es famosa por sus orquídeas, bromelias y aves endémicas como el colibrí esmeralda.',
-        lat: 11.8267,
-        lng: -85.9683,
-        direccion: 'Carretera Granada - Nandaime, Granada',
-        provincia: 'Granada',
-        horario: '8:00 AM - 4:00 PM',
-        telefono: '+505 6666-6666',
-        emailContacto: 'info@mombacho.com',
-      ),
-      Reserve(
-        reserveId: '4',
-        nombre: 'Reserva Natural Chocoyero-El Brujo',
-        descripcion: 'Esta reserva es conocida por sus impresionantes cascadas y la colonia de pericos que habitan en los acantilados. Con senderos que conducen a miradores naturales, los visitantes pueden observar estas aves coloridas en su hábitat natural.',
-        lat: 12.1234,
-        lng: -86.2345,
-        direccion: 'Carretera Managua - León, Ticuantepe',
-        provincia: 'Managua',
-        horario: '6:00 AM - 6:00 PM',
-        telefono: '+505 5555-5555',
-        emailContacto: 'info@chocoyero.com',
-      ),
-    ];
-
-    return reserves.firstWhere(
-      (reserve) => reserve.reserveId == id,
-      orElse: () => Reserve(
-        reserveId: '0',
-        nombre: 'Reserva no encontrada',
-        descripcion: 'La reserva solicitada no existe o no está disponible.',
-      ),
-    );
-  }
+  const ReserveDetailPage({
+    super.key,
+    required this.reserveId,
+  });
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Cargando...'),
-          backgroundColor: const Color(AppConfig.primaryColor),
-          foregroundColor: Colors.white,
-        ),
-        body: const Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
+    // TODO: Obtener datos reales de la API
+    final reserve = _getMockReserve();
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: DesignTokens.primaryColor,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => context.go('/reserves'),
+        ),
+        title: const Text(
+          'Detalle de Reserva',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.home, color: Colors.white),
+            onPressed: () => context.go('/home'),
+            tooltip: 'Ir al inicio',
+          ),
+        ],
+      ),
       body: CustomScrollView(
         slivers: [
-          // App Bar con imagen
+          // SliverAppBar con imagen de fondo
           SliverAppBar(
-            expandedHeight: 300,
+            expandedHeight: 250,
             pinned: true,
-            backgroundColor: const Color(AppConfig.primaryColor),
+            backgroundColor: DesignTokens.primaryColor,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                _reserve.nombre,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  shadows: [
-                    Shadow(
-                      offset: Offset(0, 1),
-                      blurRadius: 3,
-                      color: Colors.black54,
-                    ),
-                  ],
-                ),
-              ),
               background: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.green[400]!,
-                      Colors.green[700]!,
+                      DesignTokens.primaryColor,
+                      DesignTokens.primaryColor.withValues(alpha: 0.8),
                     ],
                   ),
                 ),
                 child: Stack(
                   children: [
-                    Center(
-                      child: Icon(
+                    // Placeholder para imagen de fondo
+                    Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        color: DesignTokens.primaryColor.withValues(alpha: 0.3),
+                      ),
+                      child: const Icon(
                         Icons.forest,
-                        size: 120,
-                        color: Colors.white.withOpacity(0.3),
+                        size: 100,
+                        color: Colors.white,
                       ),
                     ),
+                    // Overlay con información
                     Positioned(
-                      top: 16,
-                      right: 16,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.all(DesignTokens.spacingLg),
                         decoration: BoxDecoration(
-                          color: Colors.green[600],
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          _reserve.estado,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withValues(alpha: 0.7),
+                            ],
                           ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              reserve.nombre,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: DesignTokens.spacingSm,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(DesignTokens.borderRadiusSm),
+                              ),
+                              child: Text(
+                                reserve.estado ?? 'Desconocido',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -175,71 +127,225 @@ class _ReserveDetailPageState extends State<ReserveDetailPage> {
               ),
             ),
           ),
-
-          // Contenido
+          
+          // Contenido principal
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(DesignTokens.spacingLg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Descripción
-                  Text(
-                    'Descripción',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: const Color(AppConfig.primaryColor),
+                  _buildSection(
+                    context,
+                    title: 'Descripción',
+                    icon: Icons.info_outline,
+                    child: Text(
+                      reserve.descripcion ?? 'Sin descripción disponible',
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    _reserve.descripcion ?? 'Sin descripción disponible',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      height: 1.6,
-                      color: Colors.grey[700],
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
+                  
+                  const SizedBox(height: DesignTokens.spacingXl),
+                  
                   // Información de contacto
-                  _buildInfoSection(
-                    'Información de Contacto',
-                    Icons.contact_phone,
-                    [
-                      if (_reserve.telefono != null)
-                        _buildInfoRow(Icons.phone, 'Teléfono', _reserve.telefono!),
-                      if (_reserve.emailContacto != null)
-                        _buildInfoRow(Icons.email, 'Email', _reserve.emailContacto!),
-                      if (_reserve.horario != null)
-                        _buildInfoRow(Icons.access_time, 'Horario', _reserve.horario!),
-                    ],
+                  _buildSection(
+                    context,
+                    title: 'Información de Contacto',
+                    icon: Icons.contact_phone,
+                    child: Column(
+                      children: [
+                        _buildContactItem(
+                          context,
+                          icon: Icons.phone,
+                          label: 'Teléfono',
+                          value: reserve.telefono ?? 'No disponible',
+                        ),
+                        const SizedBox(height: DesignTokens.spacingMd),
+                        _buildContactItem(
+                          context,
+                          icon: Icons.email,
+                          label: 'Email',
+                          value: reserve.emailContacto ?? 'No disponible',
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 24),
-
-                  // Ubicación
-                  _buildInfoSection(
-                    'Ubicación',
-                    Icons.location_on,
-                    [
-                      if (_reserve.provincia != null)
-                        _buildInfoRow(Icons.map, 'Provincia', _reserve.provincia!),
-                      if (_reserve.direccion != null)
-                        _buildInfoRow(Icons.place, 'Dirección', _reserve.direccion!),
-                    ],
+                  
+                  const SizedBox(height: DesignTokens.spacingXl),
+                  
+                  // Ubicación y horarios
+                  _buildSection(
+                    context,
+                    title: 'Ubicación y Horarios',
+                    icon: Icons.location_on,
+                    child: Column(
+                      children: [
+                        _buildContactItem(
+                          context,
+                          icon: Icons.location_on,
+                          label: 'Dirección',
+                          value: reserve.direccion ?? 'No disponible',
+                        ),
+                        const SizedBox(height: DesignTokens.spacingMd),
+                        _buildContactItem(
+                          context,
+                          icon: Icons.access_time,
+                          label: 'Horario',
+                          value: reserve.horario ?? 'No disponible',
+                        ),
+                        const SizedBox(height: DesignTokens.spacingMd),
+                        _buildContactItem(
+                          context,
+                          icon: Icons.map,
+                          label: 'Provincia',
+                          value: reserve.provincia ?? 'No disponible',
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 24),
-
-                  // Mapa placeholder
-                  _buildMapSection(),
-                  const SizedBox(height: 24),
-
+                  
+                  const SizedBox(height: DesignTokens.spacingXl),
+                  
+                  // Mapa (placeholder)
+                  _buildSection(
+                    context,
+                    title: 'Ubicación en el Mapa',
+                    icon: Icons.map,
+                    child: Container(
+                      height: 200,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(DesignTokens.borderRadiusMd),
+                        border: Border.all(color: Colors.grey[300]!),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.map,
+                            size: 48,
+                            color: Colors.grey[400],
+                          ),
+                          const SizedBox(height: DesignTokens.spacingSm),
+                          Text(
+                            'Mapa próximamente',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: DesignTokens.spacingSm),
+                          Text(
+                            'Coordenadas: ${reserve.lat}, ${reserve.lng}',
+                            style: TextStyle(
+                              color: Colors.grey[500],
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  
+                  const SizedBox(height: DesignTokens.spacingXl),
+                  
                   // Servicios disponibles
-                  _buildServicesSection(),
-                  const SizedBox(height: 32),
-
+                  _buildSection(
+                    context,
+                    title: 'Servicios Disponibles',
+                    icon: Icons.list_alt,
+                    child: Column(
+                      children: [
+                        _buildServiceItem(context, 'Guías certificados', Icons.person),
+                        _buildServiceItem(context, 'Senderos marcados', Icons.directions_walk),
+                        _buildServiceItem(context, 'Observación de aves', Icons.flutter_dash),
+                        _buildServiceItem(context, 'Área de descanso', Icons.beach_access),
+                        _buildServiceItem(context, 'Estacionamiento', Icons.local_parking),
+                      ],
+                    ),
+                  ),
+                  
+                  const SizedBox(height: DesignTokens.spacingXl),
+                  
                   // Botones de acción
-                  _buildActionButtons(),
-                  const SizedBox(height: 32),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () {
+                            // TODO: Implementar compartir
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Función de compartir próximamente'),
+                                backgroundColor: Colors.blue,
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.share),
+                          label: const Text('Compartir'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: DesignTokens.primaryColor,
+                            side: BorderSide(color: DesignTokens.primaryColor),
+                            padding: const EdgeInsets.symmetric(vertical: DesignTokens.spacingLg),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: DesignTokens.spacingMd),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            // TODO: Implementar favoritos
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Agregado a favoritos'),
+                                backgroundColor: Colors.orange,
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.favorite_border),
+                          label: const Text('Favorito'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orange,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: DesignTokens.spacingLg),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  
+                  const SizedBox(height: DesignTokens.spacingLg),
+                  
+                  // Botón de reservar
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        // TODO: Implementar navegación a reserva
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Reservar en ${reserve.nombre}'),
+                            backgroundColor: DesignTokens.primaryColor,
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.calendar_today),
+                      label: const Text('Reservar Visita'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: DesignTokens.primaryColor,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: DesignTokens.spacingLg),
+                        textStyle: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  
+                  const SizedBox(height: DesignTokens.spacingXl),
                 ],
               ),
             ),
@@ -249,7 +355,12 @@ class _ReserveDetailPageState extends State<ReserveDetailPage> {
     );
   }
 
-  Widget _buildInfoSection(String title, IconData icon, List<Widget> children) {
+  Widget _buildSection(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required Widget child,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -257,142 +368,55 @@ class _ReserveDetailPageState extends State<ReserveDetailPage> {
           children: [
             Icon(
               icon,
-              color: const Color(AppConfig.primaryColor),
+              color: DesignTokens.primaryColor,
               size: 24,
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: DesignTokens.spacingSm),
             Text(
               title,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: const Color(AppConfig.primaryColor),
+                color: DesignTokens.primaryColor,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
-        ...children,
+        const SizedBox(height: DesignTokens.spacingMd),
+        child,
       ],
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            size: 20,
-            color: Colors.grey[600],
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[500],
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[800],
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMapSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildContactItem(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required String value,
+  }) {
+    return Row(
       children: [
-        Row(
-          children: [
-            Icon(
-              Icons.map,
-              color: const Color(AppConfig.primaryColor),
-              size: 24,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              'Ubicación en el Mapa',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: const Color(AppConfig.primaryColor),
-              ),
-            ),
-          ],
+        Icon(
+          icon,
+          color: DesignTokens.primaryColor,
+          size: 20,
         ),
-        const SizedBox(height: 12),
-        Container(
-          height: 200,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.grey[300]!),
-          ),
-          child: Stack(
+        const SizedBox(width: DesignTokens.spacingSm),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.map_outlined,
-                      size: 48,
-                      color: Colors.grey[400],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Mapa de ubicación',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${_reserve.lat?.toStringAsFixed(4)}, ${_reserve.lng?.toStringAsFixed(4)}',
-                      style: TextStyle(
-                        color: Colors.grey[500],
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-              Positioned(
-                top: 12,
-                right: 12,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    // TODO: Abrir mapa externo
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Funcionalidad de mapa en desarrollo'),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.open_in_new),
-                  label: const Text('Abrir'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(AppConfig.primaryColor),
-                    foregroundColor: Colors.white,
-                  ),
+              Text(
+                value,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
@@ -402,123 +426,41 @@ class _ReserveDetailPageState extends State<ReserveDetailPage> {
     );
   }
 
-  Widget _buildServicesSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(
-              Icons.list_alt,
-              color: const Color(AppConfig.primaryColor),
-              size: 24,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              'Servicios Disponibles',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: const Color(AppConfig.primaryColor),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            _buildServiceChip('Observación de Aves', Icons.flutter_dash),
-            _buildServiceChip('Senderismo', Icons.directions_walk),
-            _buildServiceChip('Fotografía', Icons.camera_alt),
-            _buildServiceChip('Guías Locales', Icons.person),
-            _buildServiceChip('Estacionamiento', Icons.local_parking),
-            _buildServiceChip('Baños', Icons.wc),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildServiceChip(String label, IconData icon) {
-    return Chip(
-      avatar: Icon(icon, size: 16, color: const Color(AppConfig.primaryColor)),
-      label: Text(
-        label,
-        style: const TextStyle(fontSize: 12),
-      ),
-      backgroundColor: Colors.green[50],
-      side: BorderSide(color: Colors.green[200]!),
-    );
-  }
-
-  Widget _buildActionButtons() {
-    return Column(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton.icon(
-            onPressed: () => context.go('/bookings/create?reserveId=${_reserve.reserveId}'),
-            icon: const Icon(Icons.calendar_today),
-            label: const Text(
-              'Reservar Visita',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(AppConfig.primaryColor),
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
+  Widget _buildServiceItem(BuildContext context, String service, IconData icon) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: DesignTokens.spacingSm),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: Colors.green,
+            size: 20,
           ),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: OutlinedButton.icon(
-                onPressed: () {
-                  // TODO: Compartir reserva
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Funcionalidad de compartir en desarrollo'),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.share),
-                label: const Text('Compartir'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(AppConfig.primaryColor),
-                  side: const BorderSide(color: Color(AppConfig.primaryColor)),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: OutlinedButton.icon(
-                onPressed: () {
-                  // TODO: Agregar a favoritos
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Funcionalidad de favoritos en desarrollo'),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.favorite_border),
-                label: const Text('Favorito'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(AppConfig.primaryColor),
-                  side: const BorderSide(color: Color(AppConfig.primaryColor)),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
+          const SizedBox(width: DesignTokens.spacingSm),
+          Text(
+            service,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Reserve _getMockReserve() {
+    // Simular obtener datos de la API basado en reserveId
+    return Reserve(
+      reserveId: reserveId,
+      nombre: 'Reserva Natural Indio Maíz',
+      descripcion: 'Una de las reservas más grandes de Nicaragua, hogar de cientos de especies de aves y vida silvestre. Esta reserva natural ofrece una experiencia única para los amantes de la naturaleza, con senderos bien marcados, guías certificados y la oportunidad de observar aves endémicas y migratorias en su hábitat natural.',
+      lat: 10.8231,
+      lng: -84.6295,
+      direccion: 'Río San Juan, Nicaragua',
+      provincia: 'Río San Juan',
+      horario: '6:00 AM - 6:00 PM',
+      telefono: '+505 8888 8888',
+      emailContacto: 'info@indio-maiz.com',
+      estado: 'Abierta',
+      createdAt: DateTime.now(),
     );
   }
 }

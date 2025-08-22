@@ -8,7 +8,7 @@ class AppConfig {
   static const int databaseVersion = 1;
   
   // App Information
-  static const String appName = 'AveTurismo Nicaragua';
+  static const String appName = 'AviFy';
   static const String appVersion = '1.0.0';
   static const String appDescription = 'Plataforma de aviturismo y reservas naturales de Nicaragua';
   

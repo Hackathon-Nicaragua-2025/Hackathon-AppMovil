@@ -15,7 +15,7 @@ void main() {
     await tester.pumpWidget(const AveTurismoApp());
 
     // Verify that our app shows the welcome message.
-    expect(find.text('AveTurismo Nicaragua'), findsOneWidget);
-    expect(find.text('¡Bienvenido a AveTurismo!'), findsOneWidget);
+    expect(find.text('AviFy'), findsOneWidget);
+    expect(find.text('¡Bienvenido a AviFy!'), findsOneWidget);
   });
 }

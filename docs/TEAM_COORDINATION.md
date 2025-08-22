@@ -2,7 +2,7 @@
 
 ## 📋 **Información del Proyecto**
 
-**Proyecto:** AveTurismo Nicaragua - Aplicación Móvil  
+**Proyecto:** AviFy - Aplicación Móvil  
 **Tecnología:** Flutter/Dart  
 **Arquitectura:** Clean Architecture  
 **Estado:** Desarrollo MVP  
@@ -10,7 +10,7 @@
 ## 👥 **Equipo**
 
 ### **Desarrollo Móvil (Flutter)**
-- **Responsable:** [Tu nombre]
+- **Responsable:** Juan Nicolas Lopez
 - **Rol:** Desarrollador Flutter
 - **Tareas:** Desarrollo de la aplicación móvil, UI/UX, integración con API
 
@@ -238,7 +238,7 @@ git push origin main
 ### **Documentación Compartida**
 - **Figma:** [Link al diseño]
 - **API Docs:** [Link a documentación]
-- **Trello/Jira:** [Link al tablero]
+- **ClickUp:** https://app.clickup.com/90132174146/v/l/6-901317923368-1
 
 ## 🔍 **Checklist de Integración**
 
